@@ -1,0 +1,5 @@
+{
+    "editor.wordWrap": "wordWrapColumn",
+    "prettier.printWidth": 100,
+    "editor.wordWrapColumn": 120
+}

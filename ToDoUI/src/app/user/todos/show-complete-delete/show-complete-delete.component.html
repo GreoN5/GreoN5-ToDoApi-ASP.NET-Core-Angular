@@ -1,0 +1,30 @@
+<header>
+    <h1>Welcome to your To-Do list</h1>
+</header>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Due date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of todoService.toDoList">
+            <td>{{data.id}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.description}}</td>
+            <td>{{data.dueDate}}</td>
+            <td>{{data.status}}</td>
+            <td id="link" (click)="deleteTask(data.id)" *ngIf="data.status != 'Overdue' && data.status != 'Completed' ">
+                Delete
+            </td>
+            <td id="link" (click)="completeTask(data.id)" *ngIf="data.status != 'Overdue' && data.status != 'Completed' ">
+                Complete
+            </td>
+        </tr>
+    </tbody>
+</table>

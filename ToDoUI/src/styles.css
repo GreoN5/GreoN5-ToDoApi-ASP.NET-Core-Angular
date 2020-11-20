@@ -1,0 +1,123 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+main {
+  padding-top: 10px;
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+button[type="submit"], button {
+  padding: 5px 10px 5px 10px;
+  font-size: 1.1em;
+  font-weight: 900;
+  border: 2px solid black;
+  border-radius: 10px;
+  transition: 0.5s;
+  cursor: pointer;
+  background-color: burlywood;
+}
+
+button[type="submit"]:hover, button:hover {
+  background-color: lightblue;
+}
+
+header {
+  font-size: 1.5em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+form {
+  padding-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+table {
+	width: 100%;
+  border: 3px solid silver;
+  margin-top: 10px;
+  margin-left: 10px;
+	text-align: center;
+	border-collapse: collapse;
+  font-size: 18px;
+}
+
+thead {
+	border-bottom: 3px solid silver;
+}
+
+th { 
+	border-right: 1px solid silver;
+	padding: 12px;
+}
+
+td {
+	border-right: 1px solid silver;
+  border-top: 1px solid silver;
+  border-bottom: 1px solid silver;
+	padding: 5px;
+}
+
+.form-wrapper {
+  padding: 20px;
+  border: 2px solid silver;
+  border-radius: 7px;
+  text-align: center;
+}
+
+#button-logout-wrapper {
+  position: absolute;
+  margin-right: 14px;
+  right: 30%;
+  top: 14%;
+}
+
+#button-create-wrapper {
+  position: absolute;
+  margin-left: 10px;
+  top: 14%;
+}
+
+#text-box {
+  padding: 10px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  border: 2px solid black;
+  border-radius: 20px;
+  text-align: center;
+  width: 70%;
+  transition: 0.5s;
+}
+
+#text-box:focus {
+  width: 80%;
+  border-color: silver;
+}
+
+#text-danger {
+  color: red;
+  font-weight: bold;
+  font-size: 13;
+}
+
+#link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#link:hover {
+  color: red;
+}

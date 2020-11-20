@@ -1,0 +1,39 @@
+<header>
+    <h1>Create new To-Do item</h1>
+</header>
+<div class="form-container">
+    <div class="form-wrapper">
+        <form [formGroup]="todoService.createModel" autocomplete="off" (ngSubmit)="onSubmit()">
+            <div>
+                <label id="text-danger" *ngIf="todoService.createModel.get('Name').touched &&
+                todoService.createModel.get('Name').errors?.required && 
+                todoService.createModel.get('Name').errors?.maxlength">
+                This field is required!
+                </label>
+                <input type="text" formControlName="Name" id="text-box" placeholder="Enter name" maxlength="100"/>
+            </div>
+            <div>
+                <label id="text-danger" *ngIf="todoService.createModel.get('Description').touched &&
+                todoService.createModel.get('Description').errors?.maxlength">
+                This field is required!
+                </label>
+                <input type="text" formControlName="Description" id="text-box" placeholder="Enter description" maxlength="500"/>
+            </div>
+            <div>
+                <label id="text-danger" *ngIf="todoService.createModel.get('DueIn').touched &&
+                todoService.createModel.get('DueIn').errors?.required &&
+                todoService.createModel.get('DueIn').errors?.min &&
+                todoService.createModel.get('DueIn').errors?.invalidTime">
+                This field is required!
+                </label>
+                <input min="1" type="number" formControlName="DueIn" id="text-box" placeholder="Enter due in"/>
+            </div>
+            <div>
+                <button type="submit" [disabled]="!todoService.createModel.valid">Create</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h5 id="link" routerLink="/todo" routerLinkActive="active">Go back</h5>
+    </div>
+</div>
