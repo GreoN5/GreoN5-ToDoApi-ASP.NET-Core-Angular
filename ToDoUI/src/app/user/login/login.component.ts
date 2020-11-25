@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { error } from 'protractor';
 import { UserService } from 'src/app/shared/user.service';
 
 @Component({
@@ -30,6 +31,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("token", response.token);
         console.log(localStorage);
         this.router.navigateByUrl("/todo");
+      }, error => {
+        console.log(error);
       }
     );
   }

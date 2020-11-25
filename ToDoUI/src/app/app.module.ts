@@ -12,8 +12,8 @@ import { TodosComponent } from './user/todos/todos.component';
 import { CreateItemComponent } from './user/todos/create-item/create-item.component';
 import { UserService } from './shared/user.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
-import { RouterModule } from '@angular/router';
 import { ShowCompleteDeleteComponent } from './user/todos/show-complete-delete/show-complete-delete.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -30,14 +30,15 @@ import { ShowCompleteDeleteComponent } from './user/todos/show-complete-delete/s
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule,
-    RouterModule
+    HttpClientModule
   ],
   providers: [UserService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  exports: [UserComponent, AppComponent]
 })
 export class AppModule { }

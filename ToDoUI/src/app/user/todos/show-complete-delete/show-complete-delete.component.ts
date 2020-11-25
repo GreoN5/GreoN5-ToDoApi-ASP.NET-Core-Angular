@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { error } from 'protractor';
 import { TodoService } from 'src/app/shared/todo.service';
 
 @Component({
@@ -18,6 +19,8 @@ export class ShowCompleteDeleteComponent implements OnInit {
     this.todoService.getToDosByUser().subscribe(
       data => {
         this.todoService.toDoList = data;
+      }, error => {
+        console.log(error);
       });
   }
 
@@ -34,6 +37,8 @@ export class ShowCompleteDeleteComponent implements OnInit {
         }
 
         this.showToDos(); // refreshes the page
+      }, error => {
+        console.log(error);
       }
     )
   }
@@ -51,6 +56,8 @@ export class ShowCompleteDeleteComponent implements OnInit {
         }
 
         this.showToDos(); // refreshes the page
+      }, error => {
+        console.log(error);
       }
     )
   }
