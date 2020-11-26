@@ -14,11 +14,6 @@ namespace ToDo.Data
 
 		public ToDoContext() : base() { }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder builder)
-		{
-			builder.UseSqlServer("Server=DESKTOP-OI3QR52\\SQLEXPRESS;Database=ToDos;Trusted_Connection=True;MultipleActiveResultSets=True;");
-		}
-
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			builder.Entity<User>().HasKey(u => u.Username);
