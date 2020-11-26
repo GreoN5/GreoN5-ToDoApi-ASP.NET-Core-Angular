@@ -30,9 +30,9 @@ namespace ToDo.Controllers
 		[HttpPost]
 		[AllowAnonymous]
 		[Route("Register")]
-		public IActionResult Register([FromBody] UserRegistrationVM registrationUser)
+		public IActionResult Register([FromBody] UserVM registrationUser)
 		{
-			var users = this._context.Users.ToList();
+			var users = _context.Users.ToList();
 
 			User user = new User()
 			{
@@ -49,8 +49,8 @@ namespace ToDo.Controllers
 				}
 			}
 
-			this._context.Users.Add(user);
-			this._context.SaveChanges();
+			_context.Users.Add(user);
+			_context.SaveChanges();
 
 			return Ok(user);
 		}
@@ -58,9 +58,9 @@ namespace ToDo.Controllers
 		[HttpPost]
 		[AllowAnonymous]
 		[Route("Login")]
-		public IActionResult Login([FromBody] UserLoginVM loginUser)
+		public IActionResult Login([FromBody] UserVM loginUser)
 		{
-			User user = this._context.Users.Where(u => u.Username == loginUser.Username && u.Password == loginUser.Password).FirstOrDefault();
+			User user = _context.Users.Where(u => u.Username == loginUser.Username && u.Password == loginUser.Password).FirstOrDefault();
 
 			if (user != null)
 			{

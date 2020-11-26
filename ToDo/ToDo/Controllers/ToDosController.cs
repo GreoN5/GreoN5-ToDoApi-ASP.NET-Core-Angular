@@ -13,7 +13,7 @@ namespace ToDo.Controllers
 	[Route("[controller]")]
 	[ApiController]
 	[Authorize(Roles = "User")]
-	public class ToDos : Controller
+	public class ToDosController : Controller
 	{
 		private ToDoContext _toDoContext = new ToDoContext();
 		private List<ToDoDetailsVM> _toDoDetails = new List<ToDoDetailsVM>();
@@ -27,13 +27,13 @@ namespace ToDo.Controllers
 
 			if (user != null)
 			{
-				this._toDoItems = this._toDoContext.ToDos.Where(td => td.User.Username == username).ToList();
-				for (int i = 0; i < this._toDoItems.Count; i++)
+				_toDoItems = _toDoContext.ToDos.Where(td => td.User.Username == username).ToList();
+				for (int i = 0; i < _toDoItems.Count; i++)
 				{
-					this._toDoItems[i].UpdateStatusDependingOnTimeLeft();
+					_toDoItems[i].UpdateStatusDependingOnTimeLeft();
 				}
 
-				this._toDoDetails = this._toDoItems.Select(x => new ToDoDetailsVM
+				_toDoDetails = _toDoItems.Select(x => new ToDoDetailsVM
 				{
 					ID = x.ID,
 					Name = x.Name,
@@ -43,7 +43,7 @@ namespace ToDo.Controllers
 					Status = x.ToDoStatus
 				}).ToList();
 
-				return Ok(this._toDoDetails);
+				return Ok(_toDoDetails);
 			}
 
 			return NotFound(user);
@@ -74,8 +74,8 @@ namespace ToDo.Controllers
 
 				toDo.UpdateStatusDependingOnTimeLeft(); // sets the status to the new object
 
-				this._toDoContext.ToDos.Add(toDo);
-				this._toDoContext.SaveChanges();
+				_toDoContext.ToDos.Add(toDo);
+				_toDoContext.SaveChanges();
 
 				var toDoDetails = new ToDoDetailsVM()
 				{
@@ -100,7 +100,7 @@ namespace ToDo.Controllers
 
 			if (user != null)
 			{
-				var toDoTask = this._toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
+				var toDoTask = _toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
 
 				if (toDoTask == null)
 				{
@@ -111,7 +111,7 @@ namespace ToDo.Controllers
 
 				toDoTask.UpdateStatusDependingOnTimeLeft(); // updates the status to true
 
-				this._toDoContext.SaveChanges();
+				_toDoContext.SaveChanges();
 
 				return Ok(toDoTask);
 			}
@@ -127,28 +127,28 @@ namespace ToDo.Controllers
 
 			if (user != null)
 			{
-				var toDo = this._toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
+				var toDo = _toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
 
 				if (toDo == null)
 				{
 					return NotFound(toDo);
 				}
 
-				var toDoTask = this._toDoContext.ToDos.Where(td => td.ID == id)
-													  .Select(td => new ToDoDetailsVM
-													  {
-														  ID = td.ID,
-														  Name = td.Name,
-														  Description = td.Description,
-														  DueDate = td.DueDate,
-														  IsDone = td.IsDone
-													  })
-													  .FirstOrDefault();
+				var toDoTask = _toDoContext.ToDos.Where(td => td.ID == id)
+												 .Select(td => new ToDoDetailsVM
+												 {
+													 ID = td.ID,
+											 		 Name = td.Name,
+													 Description = td.Description,
+													 DueDate = td.DueDate,
+													 IsDone = td.IsDone
+												 })
+												 .FirstOrDefault();
 
 				if (toDo.ToDoStatus != "Overdue" && toDo.ToDoStatus != "Completed")
 				{
-					this._toDoContext.ToDos.Remove(toDo);
-					this._toDoContext.SaveChanges();
+					_toDoContext.ToDos.Remove(toDo);
+					_toDoContext.SaveChanges();
 
 					return Ok();
 				}
@@ -159,7 +159,7 @@ namespace ToDo.Controllers
 
 		private User FindUserByUsername(string userName)
 		{
-			return this._toDoContext.Users.Where(u => u.Username == userName).FirstOrDefault();
+			return _toDoContext.Users.Where(u => u.Username == userName).FirstOrDefault();
 		}
 	}
 }

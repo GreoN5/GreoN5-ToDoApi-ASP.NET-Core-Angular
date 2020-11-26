@@ -16,7 +16,7 @@ namespace ToDo.ViewModels
 		[Required(ErrorMessage = "This attribute is required!")]
 		public int DueIn { get; set; }
 
-		public bool IsDone { get; } = false; // the new ToDoItem receives false as default value
-											// assuming that the person enters a ToDo that is not finished yet
+		public bool IsDone { get; } // the new ToDoItem receives false as default value
+									// assuming that the person enters a ToDo that is not finished yet
 	}
 }

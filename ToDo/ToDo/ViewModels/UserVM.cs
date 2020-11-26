@@ -2,7 +2,7 @@
 
 namespace ToDo.ViewModels
 {
-	public class UserLoginVM
+	public class UserVM
 	{
 		[Required(ErrorMessage = "This field is required!")]
 		public string Username { get; set; }
