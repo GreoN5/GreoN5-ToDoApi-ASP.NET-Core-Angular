@@ -26,6 +26,7 @@ namespace ToDo
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 					.AddJwtBearer(options => 
 					{
@@ -43,6 +44,7 @@ namespace ToDo
 							ClockSkew = TimeSpan.Zero
 						};
 					});
+
 			services.AddAuthorization(config => 
 			{
 				config.AddPolicy("UserRequirement", policy => policy.RequireAuthenticatedUser().RequireRole("User").Build());
@@ -55,7 +57,7 @@ namespace ToDo
 				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 			});
 
-			services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnnection")));
+			services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,7 +12,7 @@ namespace ToDo.Data
 		public DbSet<ToDoItem> ToDos { get; set; }
 		public DbSet<User> Users { get; set; }
 
-		public ToDoContext() : base() { }
+		public ToDoContext(DbContextOptions<ToDoContext> options) : base(options) { }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

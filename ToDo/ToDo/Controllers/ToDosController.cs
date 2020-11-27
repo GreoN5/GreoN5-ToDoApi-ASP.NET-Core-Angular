@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDo.Data;
 using ToDo.Extensions;
 using ToDo.Models;
+using ToDo.Repositories;
 using ToDo.ViewModels;
 
 namespace ToDo.Controllers
@@ -15,151 +16,99 @@ namespace ToDo.Controllers
 	[Authorize(Roles = "User")]
 	public class ToDosController : Controller
 	{
-		private ToDoContext _toDoContext = new ToDoContext();
+		private readonly ToDoContext _toDoContext;
+		private ToDoRepository _repository;
 		private List<ToDoDetailsVM> _toDoDetails = new List<ToDoDetailsVM>();
-		private List<ToDoItem> _toDoItems = new List<ToDoItem>();
+
+		public ToDosController(ToDoContext context)
+		{
+			_toDoContext = context;
+		}
 
 		[Route("{username}/ToDoItems")]
 		[HttpGet]
 		public IActionResult GetAllTasksByUser(string username)
 		{
-			User user = FindUserByUsername(username);
-
-			if (user != null)
+			if (DoesUserExist(username))
 			{
-				_toDoItems = _toDoContext.ToDos.Where(td => td.User.Username == username).ToList();
-				for (int i = 0; i < _toDoItems.Count; i++)
-				{
-					_toDoItems[i].UpdateStatusDependingOnTimeLeft();
-				}
-
-				_toDoDetails = _toDoItems.Select(x => new ToDoDetailsVM
-				{
-					ID = x.ID,
-					Name = x.Name,
-					Description = x.Description,
-					DueDate = x.DueDate,
-					IsDone = x.IsDone,
-					Status = x.ToDoStatus
-				}).ToList();
+				_repository = new ToDoRepository(_toDoContext);
+				_toDoDetails = _repository.GetToDosByUser(username);
 
 				return Ok(_toDoDetails);
 			}
 
-			return NotFound(user);
+			return NotFound();
 		}
 
 		[Route("{username}/CreateToDo")]
 		[HttpPost]
 		public IActionResult CreateTask(ToDoCreateModelVM createModel, string username)
 		{
-			User user = FindUserByUsername(username);
-
-			if (user != null)
+			if (DoesUserExist(username))
 			{
 				if (!ModelState.IsValid)
 				{
 					return BadRequest();
 				}
 
-				var toDo = new ToDoItem()
-				{
-					ID = createModel.ID,
-					Name = createModel.Name,
-					Description = createModel.Description,
-					DueDate = DateTime.Now.AddHours(createModel.DueIn),
-					IsDone = createModel.IsDone,
-					User = user
-				};
-
-				toDo.UpdateStatusDependingOnTimeLeft(); // sets the status to the new object
-
-				_toDoContext.ToDos.Add(toDo);
-				_toDoContext.SaveChanges();
-
-				var toDoDetails = new ToDoDetailsVM()
-				{
-					ID = toDo.ID,
-					Name = createModel.Name,
-					Description = createModel.Description,
-					DueDate = DateTime.Now.AddHours(createModel.DueIn),
-					IsDone = createModel.IsDone
-				};
+				_repository = new ToDoRepository(_toDoContext);
+				var toDoDetails = _repository.CreateNewTask(createModel, username);
 
 				return Ok(toDoDetails);
 			}
 
-			return NotFound(user);
+			return NotFound();
 		}
 
 		[Route("{username}/CompleteTask/{id}")]
 		[HttpPut]
 		public IActionResult CompleteTask(int id, string username)
 		{
-			User user = FindUserByUsername(username);
-
-			if (user != null)
+			if (DoesUserExist(username))
 			{
-				var toDoTask = _toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
+				_repository = new ToDoRepository(_toDoContext);
+				var toDoTask = _repository.CompleteTask(id, username);
 
 				if (toDoTask == null)
 				{
 					return NotFound();
 				}
 
-				toDoTask.IsDone = true;
-
-				toDoTask.UpdateStatusDependingOnTimeLeft(); // updates the status to true
-
-				_toDoContext.SaveChanges();
-
 				return Ok(toDoTask);
 			}
 
-			return NotFound(user);
+			return NotFound();
 		}
 
 		[Route("{username}/DeleteToDo/{id}")]
 		[HttpDelete]
 		public IActionResult DeleteTask(int id, string username)
 		{
-			User user = FindUserByUsername(username);
+			if (DoesUserExist(username))
+			{
+				_repository = new ToDoRepository(_toDoContext);
+
+				if (_repository.DeleteTask(id, username))
+				{
+					return Ok("Task successfully deleted!");
+				}
+
+				return NotFound();
+			}
+
+			return NotFound();
+		}
+
+		private bool DoesUserExist(string username)
+		{
+			var user = _toDoContext.Users.Find(username);
 
 			if (user != null)
 			{
-				var toDo = _toDoContext.ToDos.Where(td => td.ID == id && td.User.Username == username).FirstOrDefault();
-
-				if (toDo == null)
-				{
-					return NotFound(toDo);
-				}
-
-				var toDoTask = _toDoContext.ToDos.Where(td => td.ID == id)
-												 .Select(td => new ToDoDetailsVM
-												 {
-													 ID = td.ID,
-											 		 Name = td.Name,
-													 Description = td.Description,
-													 DueDate = td.DueDate,
-													 IsDone = td.IsDone
-												 })
-												 .FirstOrDefault();
-
-				if (toDo.ToDoStatus != "Overdue" && toDo.ToDoStatus != "Completed")
-				{
-					_toDoContext.ToDos.Remove(toDo);
-					_toDoContext.SaveChanges();
-
-					return Ok();
-				}
+				return true;
 			}
 
-			return NotFound(user);
-		}
-
-		private User FindUserByUsername(string userName)
-		{
-			return _toDoContext.Users.Where(u => u.Username == userName).FirstOrDefault();
+			return false;
 		}
 	}
 }

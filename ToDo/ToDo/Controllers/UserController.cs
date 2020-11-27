@@ -20,11 +20,12 @@ namespace ToDo.Controllers
 	public class UserController : Controller
 	{
 		private readonly IConfiguration _config;
-		private ToDoContext _context = new ToDoContext();
+		private readonly ToDoContext _context;
 
-		public UserController(IConfiguration config)
+		public UserController(IConfiguration config, ToDoContext context)
 		{
 			_config = config;
+			_context = context;
 		}
 
 		[HttpPost]
