@@ -30,7 +30,7 @@ export class ShowCompleteDeleteComponent implements OnInit {
         for (let i = 0; i < this.todoService.toDoList.length; i++) {
           if (this.todoService.toDoList[i].id == id) {
             this.todoService.toDoList[i].isDone = true;
-            alert("Item is successfully completed!");
+            alert('Item is successfully completed!');
 
             break;
           }
@@ -49,7 +49,7 @@ export class ShowCompleteDeleteComponent implements OnInit {
         for (let i = 0; i < this.todoService.toDoList.length; i++) {
           if (this.todoService.toDoList[i].id == id) {
             this.todoService.toDoList.splice(i, 1); // removes only the item with the particular id
-            alert("Item is successfully deleted!");
+            alert('Item is successfully deleted!');
 
             break; //no need to go through another loop of the item is found
           }

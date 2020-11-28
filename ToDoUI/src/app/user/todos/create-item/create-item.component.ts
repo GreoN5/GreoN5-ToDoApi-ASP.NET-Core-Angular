@@ -18,8 +18,8 @@ export class CreateItemComponent implements OnInit {
     this.todoService.createToDo().subscribe(
       response => {
         this.todoService.createModel.reset();
-        alert("Item is successfully created!");
-        this.router.navigateByUrl("/todo");
+        alert('Item is successfully created!');
+        this.router.navigateByUrl('/todo');
       },
       error => {
         console.log(error);
