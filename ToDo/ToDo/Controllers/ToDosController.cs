@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Data;
-using ToDo.Extensions;
-using ToDo.Models;
 using ToDo.Repositories;
 using ToDo.ViewModels;
 
@@ -29,86 +25,65 @@ namespace ToDo.Controllers
 		[HttpGet]
 		public IActionResult GetAllTasksByUser(string username)
 		{
-			if (DoesUserExist(username))
-			{
-				_repository = new ToDoRepository(_toDoContext);
-				_toDoDetails = _repository.GetToDosByUser(username);
+			_repository = new ToDoRepository(_toDoContext);
+			_toDoDetails = _repository.GetToDosByUser(username);
 
-				return Ok(_toDoDetails);
+			if (_toDoDetails == null)
+			{
+				return NotFound("User not found!");
 			}
 
-			return NotFound();
+			return Ok(_toDoDetails);
 		}
 
 		[Route("{username}/CreateToDo")]
 		[HttpPost]
 		public IActionResult CreateTask(ToDoCreateModelVM createModel, string username)
 		{
-			if (DoesUserExist(username))
+			_repository = new ToDoRepository(_toDoContext);
+
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest();
-				}
-
-				_repository = new ToDoRepository(_toDoContext);
-				var toDoDetails = _repository.CreateNewTask(createModel, username);
-
-				return Ok(toDoDetails);
+				return BadRequest();
 			}
 
-			return NotFound();
+			var toDoDetails = _repository.CreateNewTask(createModel, username);
+
+			if (toDoDetails == null)
+			{
+				return NotFound("User not found!");
+			}
+
+			return Ok(toDoDetails);
 		}
 
 		[Route("{username}/CompleteTask/{id}")]
 		[HttpPut]
 		public IActionResult CompleteTask(int id, string username)
 		{
-			if (DoesUserExist(username))
+			_repository = new ToDoRepository(_toDoContext);
+			var toDoTask = _repository.CompleteTask(id, username);
+
+			if (toDoTask == null)
 			{
-				_repository = new ToDoRepository(_toDoContext);
-				var toDoTask = _repository.CompleteTask(id, username);
-
-				if (toDoTask == null)
-				{
-					return NotFound();
-				}
-
-				return Ok(toDoTask);
+				return NotFound("User or task not found!");
 			}
 
-			return NotFound();
+			return Ok(toDoTask);
 		}
 
 		[Route("{username}/DeleteToDo/{id}")]
 		[HttpDelete]
 		public IActionResult DeleteTask(int id, string username)
 		{
-			if (DoesUserExist(username))
+			_repository = new ToDoRepository(_toDoContext);
+
+			if (_repository.DeleteTask(id, username))
 			{
-				_repository = new ToDoRepository(_toDoContext);
-
-				if (_repository.DeleteTask(id, username))
-				{
-					return Ok("Task successfully deleted!");
-				}
-
-				return NotFound();
+				return Ok("Task successfully deleted!");
 			}
 
 			return NotFound();
-		}
-
-		private bool DoesUserExist(string username)
-		{
-			var user = _toDoContext.Users.Find(username);
-
-			if (user != null)
-			{
-				return true;
-			}
-
-			return false;
 		}
 	}
 }
