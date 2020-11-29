@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ToDo.Data;
+using ToDo.Repositories;
 
 namespace ToDo
 {
@@ -58,6 +59,9 @@ namespace ToDo
 			});
 
 			services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+			services.AddScoped<ToDoRepository>();
+			services.AddScoped<UserRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

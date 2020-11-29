@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ToDo.Data;
 using ToDo.Repositories;
 using ToDo.ViewModels;
 
@@ -12,20 +11,18 @@ namespace ToDo.Controllers
 	[Authorize(Roles = "User")]
 	public class ToDosController : Controller
 	{
-		private readonly ToDoContext _toDoContext;
 		private ToDoRepository _repository;
 		private List<ToDoDetailsVM> _toDoDetails = new List<ToDoDetailsVM>();
 
-		public ToDosController(ToDoContext context)
+		public ToDosController(ToDoRepository repository)
 		{
-			_toDoContext = context;
+			_repository = repository;
 		}
 
 		[Route("{username}/ToDoItems")]
 		[HttpGet]
 		public IActionResult GetAllTasksByUser(string username)
 		{
-			_repository = new ToDoRepository(_toDoContext);
 			_toDoDetails = _repository.GetToDosByUser(username);
 
 			if (_toDoDetails == null)
@@ -40,8 +37,6 @@ namespace ToDo.Controllers
 		[HttpPost]
 		public IActionResult CreateTask(ToDoCreateModelVM createModel, string username)
 		{
-			_repository = new ToDoRepository(_toDoContext);
-
 			if (!ModelState.IsValid)
 			{
 				return BadRequest();
@@ -61,7 +56,6 @@ namespace ToDo.Controllers
 		[HttpPut]
 		public IActionResult CompleteTask(int id, string username)
 		{
-			_repository = new ToDoRepository(_toDoContext);
 			var toDoTask = _repository.CompleteTask(id, username);
 
 			if (toDoTask == null)
@@ -76,8 +70,6 @@ namespace ToDo.Controllers
 		[HttpDelete]
 		public IActionResult DeleteTask(int id, string username)
 		{
-			_repository = new ToDoRepository(_toDoContext);
-
 			if (_repository.DeleteTask(id, username))
 			{
 				return Ok("Task successfully deleted!");
