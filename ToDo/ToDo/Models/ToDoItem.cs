@@ -20,7 +20,7 @@ namespace ToDo.Models
 		public DateTime DueDate { get; set; }
 
 		[Column(TypeName = "varchar(50)")]
-		public string ToDoStatus { get; set; }
+		public Status ToDoStatus { get; set; }
 
 		[Column(TypeName = "bit")]
 		public bool IsDone { get; set; }

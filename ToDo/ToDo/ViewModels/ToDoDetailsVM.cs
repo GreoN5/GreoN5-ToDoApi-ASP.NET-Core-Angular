@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ToDo.Models;
 
 namespace ToDo.ViewModels
 {
@@ -17,6 +15,6 @@ namespace ToDo.ViewModels
 
 		public bool IsDone { get; set; }
 
-		public string Status { get; set; }
+		public Status Status { get; set; }
 	}
 }

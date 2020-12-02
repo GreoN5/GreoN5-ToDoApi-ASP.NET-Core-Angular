@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ToDo.Data;
-using ToDo.Extensions;
 using ToDo.Models;
 using ToDo.ViewModels;
 
@@ -25,7 +24,7 @@ namespace ToDo.Repositories
 
 				for (int i = 0; i < toDoItems.Count; i++)
 				{
-					toDoItems[i].UpdateStatusDependingOnTimeLeft();
+					UpdateStatusDependingOnTimeLeft(toDoItems[i]);
 				}
 
 				var toDoDetails = toDoItems.Select(x => new ToDoDetailsVM
@@ -58,7 +57,7 @@ namespace ToDo.Repositories
 					User = GetUserByUsername(username)
 				};
 
-				toDo.UpdateStatusDependingOnTimeLeft(); // sets the status to the new object
+				UpdateStatusDependingOnTimeLeft(toDo); // sets the status to the new object
 
 				_toDoContext.ToDos.Add(toDo);
 				_toDoContext.SaveChanges();
@@ -90,7 +89,7 @@ namespace ToDo.Repositories
 
 				toDoTask.IsDone = true;
 
-				toDoTask.UpdateStatusDependingOnTimeLeft(); // updates the status to true
+				UpdateStatusDependingOnTimeLeft(toDoTask); // updates the status to true
 				_toDoContext.SaveChanges();
 
 				return new ToDoDetailsVM()
@@ -118,7 +117,7 @@ namespace ToDo.Repositories
 					return false;
 				}
 
-				if (toDo.ToDoStatus != "Overdue" && toDo.ToDoStatus != "Completed")
+				if (toDo.ToDoStatus != Status.Overdue && toDo.ToDoStatus != Status.Completed)
 				{
 					_toDoContext.ToDos.Remove(toDo);
 					_toDoContext.SaveChanges();
@@ -157,6 +156,31 @@ namespace ToDo.Repositories
 		private User GetUserByUsername(string username)
 		{
 			return _toDoContext.Users.Where(u => u.Username == username).FirstOrDefault();
+		}
+
+		private void UpdateStatusDependingOnTimeLeft(ToDoItem toDoItem)
+		{
+			var timeLeft = toDoItem.DueDate - DateTime.Now; // get the remaining time of the task to be done
+
+			if (toDoItem.IsDone == false)
+			{ // if the task is not completed
+				if (timeLeft.TotalHours > 12)
+				{
+					toDoItem.ToDoStatus = Status.Incompleted;
+				}
+				else if (timeLeft.TotalHours < 12 && timeLeft.TotalHours > 0)
+				{
+					toDoItem.ToDoStatus = Status.Urgent;
+				}
+				else if (timeLeft.TotalHours < 0)
+				{
+					toDoItem.ToDoStatus = Status.Overdue;
+				}
+			}
+			else
+			{ // if the task is completed
+				toDoItem.ToDoStatus = Status.Completed;
+			}
 		}
 	}
 }

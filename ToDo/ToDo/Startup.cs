@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using ToDo.Data;
 using ToDo.Repositories;
 
@@ -56,6 +57,7 @@ namespace ToDo
 			services.AddMvc().AddNewtonsoftJson(options => 
 			{
 				options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+				options.SerializerSettings.Converters.Add(new StringEnumConverter());
 			});
 
 			services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
