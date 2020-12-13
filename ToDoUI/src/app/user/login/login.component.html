@@ -6,10 +6,10 @@
     <div class="form-wrapper">
       <form #loginForm="ngForm" autocomplete="off" (submit)="onSubmit(loginForm)">
         <div>
-          <input #Username="ngModel" name="Username" [(ngModel)]="loginModel.Username" type="text" id="text-box" placeholder="Enter username" required/>
+          <input #Username="ngModel" name="Username" [ngModel]="loginModel.Username" type="text" id="text-box" placeholder="Enter username" required/>
         </div>
         <div>
-          <input #Password="ngModel" name="Password" [(ngModel)]="loginModel.Password" type="password" id="text-box" placeholder="Enter password" required/>
+          <input #Password="ngModel" name="Password" [ngModel]="loginModel.Password" type="password" id="text-box" placeholder="Enter password" required/>
         </div>
         <div>
           <button type="submit" [disabled]="loginForm.invalid">Login</button>

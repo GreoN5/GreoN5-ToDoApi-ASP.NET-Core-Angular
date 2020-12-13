@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { error } from 'protractor';
 import { TodoService } from 'src/app/shared/todo.service';
 
 @Component({

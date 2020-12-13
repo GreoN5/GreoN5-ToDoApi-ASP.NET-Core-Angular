@@ -52,7 +52,7 @@ export class TodoService {
   }
 
   deleteToDo(id) {
-    return this.http.delete(this.ApiURL + '/ToDos/' + this.getLoggedUser() + '/DeleteToDo/' + id);
+    return this.http.delete(this.ApiURL + '/ToDos/' + this.getLoggedUser() + '/DeleteToDo/' + id, { responseType: 'text' as 'json' });
   }
 
   getLoggedUser() {
