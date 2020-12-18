@@ -10,6 +10,9 @@ export class RegistrationComponent implements OnInit {
 
   constructor(public service: UserService) { }
 
+  regSuccessMsg: boolean;
+  regSameUsernameMsg: boolean;
+
   ngOnInit(): void {
     this.service.registerModel.reset();
   }
@@ -18,9 +21,12 @@ export class RegistrationComponent implements OnInit {
     this.service.register().subscribe(
       (response: any) => { //in any kind of response it will clear the form
         this.service.registerModel.reset();
+        this.regSuccessMsg = true
       },
       error => {
-        console.log(error);
+        if (error.status === 409) {
+          this.regSameUsernameMsg = true;
+        }
       }
     )
   }

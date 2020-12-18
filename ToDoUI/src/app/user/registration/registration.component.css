@@ -1,0 +1,15 @@
+.success-message {
+    width: 80%;
+    background-color: lightgreen;
+    color: seagreen;
+    border-radius: 5px;
+    margin-left: 2.5em;
+}
+
+.failure-message {
+    width: 80%;
+    background-color: red;
+    color: ghostwhite;
+    border-radius: 5px;
+    margin-left: 2.5em;
+}

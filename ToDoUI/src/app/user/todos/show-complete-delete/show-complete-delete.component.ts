@@ -10,6 +10,9 @@ export class ShowCompleteDeleteComponent implements OnInit {
 
   constructor(public todoService: TodoService) { }
 
+  completeItemMsg: boolean
+  deleteItemMsg: boolean
+
   ngOnInit(): void {
     this.showToDos();
   }
@@ -29,13 +32,13 @@ export class ShowCompleteDeleteComponent implements OnInit {
         for (let i = 0; i < this.todoService.toDoList.length; i++) {
           if (this.todoService.toDoList[i].id == id) {
             this.todoService.toDoList[i].isDone = true;
-            alert('Item is successfully completed!');
 
             break;
           }
         }
 
         this.showToDos(); // refreshes the page
+        this.completeItemMsg = true
       }, error => {
         console.log(error);
       }
@@ -48,13 +51,13 @@ export class ShowCompleteDeleteComponent implements OnInit {
         for (let i = 0; i < this.todoService.toDoList.length; i++) {
           if (this.todoService.toDoList[i].id == id) {
             this.todoService.toDoList.splice(i, 1); // removes only the item with the particular id
-            alert('Item is successfully deleted!');
 
             break; //no need to go through another loop of the item is found
           }
         }
 
         this.showToDos(); // refreshes the page
+        this.deleteItemMsg = true
       }, error => {
         console.log(error);
       }

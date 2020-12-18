@@ -1,0 +1,7 @@
+.complete-message, .delete-message {
+    width: 80%;
+    background-color: lightgreen;
+    color: seagreen;
+    border-radius: 5px;
+    margin-left: 5em;
+}

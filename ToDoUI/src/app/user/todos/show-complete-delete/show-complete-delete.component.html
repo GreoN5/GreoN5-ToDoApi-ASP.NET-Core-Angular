@@ -2,6 +2,13 @@
     <h1>Welcome to your To-Do list</h1>
 </header>
 
+<div class="complete-message" *ngIf="completeItemMsg">
+    <h4>Item successfully completed!</h4>
+</div>
+<div class="delete-message" *ngIf="deleteItemMsg">
+    <h4>Item successfully deleted!</h4>
+</div>
+
 <table>
     <thead>
         <tr>

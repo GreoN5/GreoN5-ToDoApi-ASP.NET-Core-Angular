@@ -176,9 +176,9 @@ namespace ToDo.Repositories
 				{
 					toDoItem.ToDoStatus = Status.Overdue;
 				}
-			}
+			} 
 			else
-			{ // if the task is completed
+			{
 				toDoItem.ToDoStatus = Status.Completed;
 			}
 		}

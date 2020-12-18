@@ -29,7 +29,7 @@ namespace ToDo.Controllers
 
 			if (user == null)
 			{
-				return StatusCode(409, $"User with {user.Username} already exists!");
+				return StatusCode(409, $"User with {registrationUser.Username} already exists!");
 			}
 
 			return Ok(user);

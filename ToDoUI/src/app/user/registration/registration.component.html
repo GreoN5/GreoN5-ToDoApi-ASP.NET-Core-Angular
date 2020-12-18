@@ -1,50 +1,56 @@
 <header>
   <h1>User registration</h1>
 </header>
-  <div class="form-container">
-    <div class="form-wrapper">
-      <form [formGroup]="service.registerModel" autocomplete="off" (ngSubmit)="onSubmit()">
+<div class="success-message" *ngIf="regSuccessMsg">
+  <h4>Registration successfull!</h4>
+</div>
+<div class="failure-message" *ngIf="regSameUsernameMsg">
+  <h4>Username already exists! Try another one.</h4>
+</div>
+<div class="form-container">
+  <div class="form-wrapper">
+    <form [formGroup]="service.registerModel" autocomplete="off" (ngSubmit)="onSubmit()">
+      <div>
+        <label id="text-danger" *ngIf="
+          service.registerModel.get('Username').touched &&
+          service.registerModel.get('Username').errors?.required">
+          This field is required!
+        </label>
+        <input type="text" formControlName="Username" id="text-box" placeholder="Enter username"/>
+        <label class="required"></label>
+      </div>
+      <div formGroupName="Passwords">
         <div>
-          <label id="text-danger" *ngIf="
-              service.registerModel.get('Username').touched &&
-              service.registerModel.get('Username').errors?.required">
-            This field is required!
-          </label>
-          <input type="text" formControlName="Username" id="text-box" placeholder="Enter username"/>
+          <label id="text-danger" *ngIf=
+            "service.registerModel.get('Passwords.Password').touched &&
+            service.registerModel.get('Passwords.Password').errors?.required">This field is required!</label>
+          <label id="text-danger" *ngIf=
+            "service.registerModel.get('Passwords.Password').touched &&
+            service.registerModel.get('Passwords.Password').hasError('minlength')">Minimun 6 characters</label>
+          <input type="password" formControlName="Password" minlength="6" id="text-box" placeholder="Enter password"/>
           <label class="required"></label>
         </div>
-        <div formGroupName="Passwords">
-          <div>
-            <label id="text-danger" *ngIf=
-                "service.registerModel.get('Passwords.Password').touched &&
-                service.registerModel.get('Passwords.Password').errors?.required">This field is required!</label>
-            <label id="text-danger" *ngIf=
-                "service.registerModel.get('Passwords.Password').touched &&
-                service.registerModel.get('Passwords.Password').hasError('minlength')">Minimun 6 characters</label>
-            <input type="password" formControlName="Password" minlength="6" id="text-box" placeholder="Enter password"/>
-            <label class="required"></label>
-          </div>
-          <div>
-            <label id="text-danger" *ngIf=
-                "service.registerModel.get('Passwords.ConfirmPassword').touched &&
-                service.registerModel.get('Passwords.ConfirmPassword').errors?.required">
-                This field is required!
-            </label>
-            <label id="text-danger" *ngIf=
-                "service.registerModel.get('Passwords.ConfirmPassword').touched &&
-                service.registerModel.get('Passwords.ConfirmPassword').errors?.passwordMismatch">
-                Password does not match!
-            </label>
-            <input type="password" formControlName="ConfirmPassword" id="text-box" placeholder="Confirm password"/>
-            <label class="required"></label>
-          </div>
-        </div>
         <div>
-          <button type="submit" [disabled]="!service.registerModel.valid">Sign up</button>
+          <label id="text-danger" *ngIf=
+            "service.registerModel.get('Passwords.ConfirmPassword').touched &&
+            service.registerModel.get('Passwords.ConfirmPassword').errors?.required">
+            This field is required!
+          </label>
+          <label id="text-danger" *ngIf=
+            "service.registerModel.get('Passwords.ConfirmPassword').touched &&
+            service.registerModel.get('Passwords.ConfirmPassword').errors?.passwordMismatch">
+            Password does not match!
+          </label>
+          <input type="password" formControlName="ConfirmPassword" id="text-box" placeholder="Confirm password"/>
+          <label class="required"></label>
         </div>
-      </form>
-    </div>
-    <div>
-        <h4 id="link" routerLink="/user/login" routerLinkActive="active">Already have an account? Sign in!</h4>
-    </div>
+      </div>
+      <div>
+        <button type="submit" [disabled]="!service.registerModel.valid">Sign up</button>
+      </div>
+    </form>
   </div>
+  <div>
+    <h4 id="link" routerLink="/user/login" routerLinkActive="active">Already have an account? Sign in!</h4>
+  </div>
+</div>
